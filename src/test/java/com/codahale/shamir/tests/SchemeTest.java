@@ -131,4 +131,25 @@ class SchemeTest implements WithQuickTheories {
     entries.forEach(v -> m.put(v.getKey(), v.getValue()));
     return scheme.join(m);
   }
+  
+  @Test
+  void test() {
+    final Scheme scheme = new Scheme(new SecureRandom(), 12, 7);
+    final byte[] secret = "123456789".getBytes(StandardCharsets.UTF_8);
+    final Map<Integer, byte[]> parts = scheme.split(secret);
+
+    Map<Integer, byte[]> parts2 =new HashMap<>();
+    parts2.put(1,parts.get(1));
+    parts2.put(7,parts.get(7));
+    parts2.put(2,parts.get(2));
+    parts2.put(4,parts.get(4));
+    parts2.put(5,parts.get(5));
+    parts2.put(6,parts.get(6));
+    parts2.put(3,parts.get(3));
+
+    //parts2.put(5,parts.get(5));
+
+    final byte[] recovered = scheme.join(parts2);
+    System.out.println("还原:"+new String(recovered, StandardCharsets.UTF_8));
+  }
 }
